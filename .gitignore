@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.ipynb_checkpoints/
+_tmp*.py
+data/input/*
+data/output/*
+!data/output/.gitkeep
+logs/*
