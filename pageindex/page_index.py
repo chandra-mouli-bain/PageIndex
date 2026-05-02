@@ -102,6 +102,23 @@ async def check_title_appearance_in_start_concurrent(structure, page_list, model
 
 
 def toc_detector_single_page(content, model=None):
+    lower = (content or "").lower()
+    dot_leader_matches = len(re.findall(r"\.{2,}\s*\d+\b", content or ""))
+    numbered_line_matches = len(
+        re.findall(r"(?im)^\s*(?:\d+[\.\)]\s+)?[a-z][^\n]{2,80}\s+\.{2,}\s*\d+\s*$", content or "")
+    )
+
+    # Fast path: obvious TOC-like patterns
+    if "table of contents" in lower:
+        return "yes"
+    if ("contents" in lower or "table of content" in lower) and (dot_leader_matches >= 2 or numbered_line_matches >= 2):
+        return "yes"
+
+    # Fast path: obvious non-TOC pages
+    if "contents" not in lower and "table of content" not in lower and dot_leader_matches == 0:
+        return "no"
+
+    # Ambiguous page: defer to LLM
     prompt = f"""
     Your job is to detect if there is a table of content provided in the given text.
 
@@ -458,6 +475,87 @@ def page_list_to_group_text(page_contents, token_lengths, max_tokens=20000, over
     print('divide page_list to groups', len(subsets))
     return subsets
 
+
+def _normalize_title(text):
+    if not text:
+        return ""
+    text = re.sub(r"\s+", " ", text).strip()
+    return text[:180]
+
+
+def _first_meaningful_line(page_text):
+    lines = [line.strip() for line in (page_text or "").splitlines() if line.strip()]
+    if not lines:
+        return "Untitled section"
+    for line in lines:
+        if len(line) < 3:
+            continue
+        if not re.search(r"[A-Za-z]", line):
+            continue
+        if re.fullmatch(r"[\d\W_]+", line):
+            continue
+        return _normalize_title(line)
+    return _normalize_title(lines[0])
+
+
+def _fallback_outline_from_pages(page_list, start_index=1):
+    outline = []
+    for offset, (page_text, _) in enumerate(page_list):
+        page_num = start_index + offset
+        outline.append(
+            {
+                "structure": str(len(outline) + 1),
+                "title": _first_meaningful_line(page_text),
+                "physical_index": f"<physical_index_{page_num}>",
+            }
+        )
+    return outline
+
+
+def _extract_outline_with_retries(text_block, model=None):
+    try:
+        result = generate_toc_init(text_block, model)
+        if isinstance(result, list):
+            return result
+    except Exception:
+        pass
+    return []
+
+
+def _normalize_outline_items(items):
+    normalized = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        title = _normalize_title(item.get("title", ""))
+        physical_index = item.get("physical_index")
+        if not title or physical_index is None:
+            continue
+        normalized.append(
+            {
+                "structure": str(item.get("structure") or ""),
+                "title": title,
+                "physical_index": physical_index,
+            }
+        )
+
+    normalized = convert_physical_index_to_int(normalized)
+    normalized = [item for item in normalized if isinstance(item.get("physical_index"), int)]
+    normalized.sort(key=lambda x: x["physical_index"])
+
+    deduped = []
+    seen = set()
+    for item in normalized:
+        key = (item["physical_index"], item["title"].lower())
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(item)
+
+    for i, item in enumerate(deduped, start=1):
+        item["structure"] = str(i)
+    return deduped
+
 def add_page_number_to_toc(part, structure, model=None):
     fill_prompt_seq = """
     You are given an JSON structure of a document and a partial part of the document. Your task is to check if the title that is described in the structure is started in the partial given document.
@@ -580,18 +678,31 @@ def process_no_toc(page_list, start_index=1, model=None, logger=None):
         page_text = f"<physical_index_{page_index}>\n{page_list[page_index-start_index][0]}\n<physical_index_{page_index}>\n\n"
         page_contents.append(page_text)
         token_lengths.append(count_tokens(page_text, model))
-    group_texts = page_list_to_group_text(page_contents, token_lengths)
-    logger.info(f'len(group_texts): {len(group_texts)}')
+    group_texts = page_list_to_group_text(page_contents, token_lengths, max_tokens=8000, overlap_page=0)
+    if logger:
+        logger.info(f'len(group_texts): {len(group_texts)}')
 
-    toc_with_page_number= generate_toc_init(group_texts[0], model)
-    for group_text in group_texts[1:]:
-        toc_with_page_number_additional = generate_toc_continue(toc_with_page_number, group_text, model)    
-        toc_with_page_number.extend(toc_with_page_number_additional)
-    logger.info(f'generate_toc: {toc_with_page_number}')
+    all_items = []
+    for group_text in group_texts:
+        group_items = _extract_outline_with_retries(group_text, model=model)
+        if group_items:
+            all_items.extend(group_items)
+            continue
 
-    toc_with_page_number = convert_physical_index_to_int(toc_with_page_number)
-    logger.info(f'convert_physical_index_to_int: {toc_with_page_number}')
+        for page_text in re.findall(r'<physical_index_\d+>.*?<physical_index_\d+>', group_text, flags=re.DOTALL):
+            page_items = _extract_outline_with_retries(page_text, model=model)
+            if page_items:
+                all_items.extend(page_items)
 
+    toc_with_page_number = _normalize_outline_items(all_items)
+
+    if not toc_with_page_number:
+        toc_with_page_number = _normalize_outline_items(_fallback_outline_from_pages(page_list, start_index=start_index))
+        if logger:
+            logger.info("No-TOC LLM extraction failed; using deterministic page-based fallback outline.")
+
+    if logger:
+        logger.info(f'generate_toc: {toc_with_page_number}')
     return toc_with_page_number
 
 def process_toc_no_page_numbers(toc_content, toc_page_list, page_list,  start_index=1, model=None, logger=None):
@@ -691,6 +802,217 @@ def process_none_page_numbers(toc_items, page_list, start_index=1, model=None):
     return toc_items
 
 
+
+
+def _normalize_space(text):
+    return re.sub(r"\s+", " ", (text or "")).strip()
+
+
+def _looks_like_transcript(page_list):
+    if not page_list:
+        return False
+
+    sample_pages = page_list[: min(8, len(page_list))]
+    sample_text = "\n".join(page[0] or "" for page in sample_pages)
+    lines = [line.strip() for line in sample_text.splitlines() if line.strip()]
+
+    # Pattern 1: "Speaker Name: ..."
+    colon_speaker_hits = len(
+        re.findall(r"(?m)^[A-Z][A-Za-z\.\-'\s]{1,60}:\s+\S", sample_text)
+    )
+
+    # Pattern 2: standalone speaker labels (short title-cased/all-caps lines) followed by sentence text
+    standalone_hits = 0
+    label_pattern = re.compile(r"^[A-Z][A-Za-z\.\-']+(?:\s+[A-Z][A-Za-z\.\-']+){0,4}$")
+    for i, line in enumerate(lines[:-1]):
+        next_line = lines[i + 1]
+        if not label_pattern.fullmatch(line):
+            continue
+        if len(next_line) < 25:
+            continue
+        if next_line.isupper():
+            continue
+        standalone_hits += 1
+
+    # Pattern 3: dialogue-turn density
+    short_header_lines = sum(
+        1 for line in lines[:120] if 2 <= len(line.split()) <= 6 and re.fullmatch(r"[A-Za-z0-9&/\-'\.\s]+", line)
+    )
+
+    return colon_speaker_hits >= 2 or standalone_hits >= 3 or short_header_lines >= 15
+
+
+def _find_transcript_sections(page_list, start_index=1):
+    def heading_score(line):
+        normalized = _normalize_space(line)
+        if not normalized:
+            return 0
+        words = normalized.split()
+        if len(words) > 8:
+            return 0
+        if len(normalized) < 4:
+            return 0
+        if re.search(r"\d{4}", normalized):
+            return 0
+        if re.search(r"https?://|www\.", normalized, flags=re.IGNORECASE):
+            return 0
+        lower_words = [w.lower() for w in words]
+        unique_ratio = len(set(lower_words)) / max(len(lower_words), 1)
+        if unique_ratio < 0.65:
+            return 0
+        all_caps_words = sum(1 for w in words if w.isupper())
+        if len(words) >= 5 and all_caps_words >= len(words) - 1:
+            return 0
+
+        score = 0
+        if normalized.isupper():
+            score += 2
+        if normalized.istitle():
+            score += 1
+        if re.fullmatch(r"[A-Za-z0-9&/\-\s:]+", normalized):
+            score += 1
+        return score
+
+    starts = []
+    for i, (page_text, _) in enumerate(page_list):
+        page_number = start_index + i
+        lines = [_normalize_space(line) for line in (page_text or "").splitlines() if _normalize_space(line)]
+        top_candidates = lines[:12]
+        best_heading = None
+        best_score = 0
+        for line in top_candidates:
+            score = heading_score(line)
+            if score > best_score:
+                best_score = score
+                best_heading = line
+        if best_heading and best_score >= 2:
+            starts.append((page_number, best_heading))
+
+    if not starts:
+        return []
+
+    deduped = []
+    for page_num, title in sorted(starts, key=lambda x: x[0]):
+        normalized = _normalize_space(title)
+        if deduped:
+            prev_title = deduped[-1][1]
+            if normalized.lower() == prev_title.lower():
+                continue
+            if page_num - deduped[-1][0] <= 1 and len(normalized.split()) <= 2 and len(prev_title.split()) <= 2:
+                continue
+        deduped.append((page_num, normalized))
+
+    return deduped
+
+
+def _extract_speaker_turns_from_page(page_text):
+    lines = [_normalize_space(line) for line in (page_text or "").splitlines() if _normalize_space(line)]
+    if not lines:
+        return []
+
+    colon_pattern = re.compile(r"^([A-Z][A-Za-z\.\-'\s]{1,60}):\s+\S")
+    person_pattern = re.compile(r"^[A-Z][A-Za-z\.\-']+(?:\s+[A-Z][A-Za-z\.\-']+){0,4}$")
+    turns = []
+
+    for line in lines[:120]:
+        match = colon_pattern.match(line)
+        if match:
+            speaker = _normalize_space(match.group(1))
+            if speaker:
+                turns.append(speaker)
+
+    for i, line in enumerate(lines[:120]):
+        if person_pattern.fullmatch(line):
+            next_line = lines[i + 1].lower() if i + 1 < len(lines) else ""
+            if len(next_line) > 24 and not next_line.isupper():
+                turns.append(line)
+
+    deduped = []
+    for speaker in turns:
+        if not deduped or deduped[-1] != speaker:
+            deduped.append(speaker)
+    return deduped
+
+
+def _build_transcript_tree(page_list, start_index=1, logger=None):
+    total_pages = len(page_list)
+    final_page = start_index + total_pages - 1
+    section_starts = _find_transcript_sections(page_list, start_index=start_index)
+
+    if logger:
+        logger.info({"transcript_section_starts": section_starts})
+
+    if not section_starts or section_starts[0][0] > start_index:
+        section_starts.insert(0, (start_index, "Transcript"))
+
+    sections = []
+    for idx, (sec_start, sec_title) in enumerate(section_starts):
+        sec_end = section_starts[idx + 1][0] - 1 if idx + 1 < len(section_starts) else final_page
+        if sec_end < sec_start:
+            continue
+
+        section = {
+            "title": sec_title,
+            "start_index": sec_start,
+            "end_index": sec_end,
+            "nodes": [],
+        }
+
+        speaker_segments = []
+        current_speaker = None
+        current_start = None
+        for page_num in range(sec_start, sec_end + 1):
+            page_text = page_list[page_num - start_index][0]
+            speaker_turns = _extract_speaker_turns_from_page(page_text)
+            for speaker in speaker_turns:
+                if speaker != current_speaker:
+                    if current_speaker is not None and current_start is not None:
+                        speaker_segments.append((current_speaker, current_start, page_num))
+                    current_speaker = speaker
+                    current_start = page_num
+
+        if current_speaker is not None and current_start is not None:
+            speaker_segments.append((current_speaker, current_start, sec_end))
+
+        cleaned_segments = []
+        for speaker, seg_start, seg_end in speaker_segments:
+            if seg_end < seg_start:
+                seg_end = seg_start
+            cleaned_segments.append((speaker, seg_start, seg_end))
+
+        speaker_segments = []
+        for speaker, seg_start, seg_end in cleaned_segments:
+            if speaker_segments and speaker_segments[-1][0] == speaker and seg_start <= speaker_segments[-1][2] + 1:
+                prev = speaker_segments[-1]
+                speaker_segments[-1] = (prev[0], prev[1], max(prev[2], seg_end))
+            else:
+                speaker_segments.append((speaker, seg_start, seg_end))
+
+        # If speaker turns are sparse, add deterministic page chunks for better retrieval granularity.
+        if len(speaker_segments) < 3 and (sec_end - sec_start + 1) >= 4:
+            page_chunks = []
+            chunk_size = 2
+            chunk_id = 1
+            for chunk_start in range(sec_start, sec_end + 1, chunk_size):
+                chunk_end = min(chunk_start + chunk_size - 1, sec_end)
+                page_chunks.append((f"Segment {chunk_id}", chunk_start, chunk_end))
+                chunk_id += 1
+            speaker_segments = page_chunks
+
+        if not speaker_segments:
+            speaker_segments = [("Discussion", sec_start, sec_end)]
+
+        section["nodes"] = [
+            {
+                "title": speaker,
+                "start_index": seg_start,
+                "end_index": seg_end,
+            }
+            for speaker, seg_start, seg_end in speaker_segments
+        ]
+        sections.append(section)
+
+    return sections
 
 
 def check_toc(page_list, opt=None):
@@ -1030,6 +1352,11 @@ async def process_large_node_recursively(node, page_list, opt=None, logger=None)
     return node
 
 async def tree_parser(page_list, opt, doc=None, logger=None):
+    if _looks_like_transcript(page_list):
+        if logger:
+            logger.info("Transcript-like document detected: bypassing TOC flow and using transcript tree builder.")
+        return _build_transcript_tree(page_list, start_index=1, logger=logger)
+
     check_toc_result = check_toc(page_list, opt)
     logger.info(check_toc_result)
 

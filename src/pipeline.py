@@ -68,7 +68,6 @@ class PageIndexPdfPipeline:
                 "toc_check_pages": self.settings.toc_check_pages,
                 "max_pages_per_node": self.settings.max_pages_per_node,
                 "max_tokens_per_node": self.settings.max_tokens_per_node,
-                "excluded_titles": sorted(DEFAULT_EXCLUDED_TITLES),
             },
             "timing": {
                 "tree_build_seconds": round(tree_build_time, 3),

@@ -31,6 +31,24 @@ Section text:
 """.strip()
 
 
+def fallback_summary(node: dict[str, Any]) -> str:
+    """Create a deterministic backup summary when the LLM result is unavailable."""
+    title = (node.get("title") or "").strip()
+    text = compact_text(node.get("text", ""), max_chars=500)
+    if not text:
+        return title
+
+    text = text.replace("\n", " ").strip()
+    if title and text.lower().startswith(title.lower()):
+        text = text[len(title):].lstrip(" :.-")
+
+    words = text.split()
+    compact = " ".join(words[:60]).strip()
+    if len(words) > 60:
+        compact += " ..."
+    return compact or title
+
+
 async def generate_retrieval_summaries(tree_result: list[dict[str, Any]], model: str) -> None:
     """Generate concise retrieval-oriented summaries for all tree nodes.
     
@@ -67,10 +85,13 @@ async def generate_retrieval_summaries(tree_result: list[dict[str, Any]], model:
                 text=compact_text(node.get("text", ""), max_chars=12000),
             )
             summary = await llm_acompletion(model, prompt)
-            return node["node_id"], (summary or "").strip()
+            summary_text = (summary or "").strip()
+            if not summary_text:
+                summary_text = fallback_summary(node)
+            return node["node_id"], summary_text
         except Exception as e:
             print(f"Error generating summary for node '{node.get('title', 'unknown')}': {str(e)}")
-            return node.get("node_id", "unknown"), ""
+            return node.get("node_id", "unknown"), fallback_summary(node)
 
     summaries = await asyncio.gather(*[build_summary(node) for node in nodes], return_exceptions=True)
     
@@ -84,4 +105,4 @@ async def generate_retrieval_summaries(tree_result: list[dict[str, Any]], model:
             print(f"Task failed with exception: {result}")
     
     for node in nodes:
-        node["summary"] = summary_map.get(node.get("node_id"), "")
+        node["summary"] = summary_map.get(node.get("node_id"), "") or fallback_summary(node)

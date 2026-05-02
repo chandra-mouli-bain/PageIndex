@@ -10,12 +10,7 @@ from typing import Any
 from pageindex.utils import extract_json, llm_completion, remove_fields
 
 
-DEFAULT_EXCLUDED_TITLES = {
-    "insights cockpit",
-    "functional requirements",
-    "contents",
-    "status summary",
-}
+DEFAULT_EXCLUDED_TITLES: set[str] = set()
 
 TREE_SEARCH_PROMPT = """
 You are given a user question and a PageIndex tree of a document.

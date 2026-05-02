@@ -10,7 +10,8 @@ from src.config import PipelineSettings, load_environment
 # Query Configuration (edit these directly)
 # -------------------------------------------
 # If set, this one query will run.
-SINGLE_QUERY: str | None = None
+# SINGLE_QUERY: str | None = None
+SINGLE_QUERY = "What are the main discussion themes?"
 # Add multiple queries here for batch runs.
 BATCH_QUERIES: list[str] = []
 
