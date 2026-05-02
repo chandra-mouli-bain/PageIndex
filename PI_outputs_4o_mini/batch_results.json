@@ -1,0 +1,852 @@
+[
+  {
+    "query": "What validations are applied to benchmark upload data?",
+    "l1_ids": [
+      "0025"
+    ],
+    "evidence_node_ids": [
+      "0028"
+    ],
+    "selected_nodes": [
+      {
+        "node_id": "0028",
+        "title": "Benchmark Upload",
+        "path": "Benchmarking > Benchmark Upload"
+      }
+    ],
+    "timing": {
+      "routing_seconds": 0.59,
+      "answer_seconds": 0.3,
+      "total_seconds": 0.89,
+      "passes": 2
+    },
+    "traversal_path": [
+      {
+        "pass": 1,
+        "candidates": [
+          "0001",
+          "0002",
+          "0004",
+          "0005",
+          "0010",
+          "0019",
+          "0025",
+          "0038",
+          "0059"
+        ],
+        "decisions": [
+          {
+            "id": "0025",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.288
+      },
+      {
+        "pass": 2,
+        "candidates": [
+          "0026",
+          "0027",
+          "0028",
+          "0032",
+          "0033"
+        ],
+        "decisions": [
+          {
+            "id": "0028",
+            "decision": "STOP"
+          }
+        ],
+        "latency_seconds": 0.303
+      }
+    ],
+    "answer": "The validations applied to benchmark upload data include:\n\n- **KPI Values**: Checks for the standard KPIs and identifies any unknown KPIs present in the data.\n- **Data Type Mismatch**: Ensures % values are provided for KPIs with percentage metrics and numbers for numerical metrics.\n- **Mandatory Fields**: Ensures that none of the mandatory fields are left blank.\n\nIf errors are found, an error file is generated similar to the Baseline error file, and users need to fix the errors and reupload the data.\n\nSources: [Node 0028] Benchmarking > Benchmark Upload",
+    "evidence": "[Node 0028] Benchmarking > Benchmark Upload\n## Benchmark Upload\n\nThis page is required to upload the benchmarking data to be used for the assessment.\n\nThe Benchmark Upload screen facilitates the uploading of benchmarking data for assessments. It features a 'Download Template' button, allowing users to download a preformatted Excel template. Users can upload their data by dragging and dropping a CSV file into the designated area, with a file size limit of 20MB. The page includes a link to an FAQ for additional guidance. This screen is part of the workflow for uploading benchmark data, which is essential for comparing key performance indicators (KPIs) across different taxonomy levels.\n\n### Download Template\n\nOn clicking the “Download Template” button, an excel file is downloaded in the format shown below.\n\n1. The Template is prefilled with the taxonomy levels selected by the user on the Assessment & Taxonomy selection page.\n2. Any functions/processes/activities that have been modified or newly added by the user will be highlighted using a different font color\n3. To define the benchmark values for the same taxonomy level for different sets, users need to duplicate the rows\n4. For each level , the first row will be considered as the primary/default peer set for that combination. The default peer sets can be changed later from the “Explore Benchmarks” page\n\nCurrently the tool offers the following 6 KPIs for comparison:\n\n### Overall cost (needs GL)\n\n1. Cost of X (for L1 function, L2 process or L3 activities) as a % of revenue\n2. Cost of X per employee\n\n### Number of employees (needs HC)\n\n1. # of employees in X as a % of total employees\n2. # of employees in X per $1B revenue\n\n### Personnel cost (needs GL or HC; consider comment in sticker in GL columns slide)\n\n1. Personnel cost of X as a % of revenue\n2. Personnel cost of X per employee\n\n### Validations\n\nFollowing validations are performed on the benchmarking data:\n\n### KPI values\n\nChecks for the standard KPIs and if any unknown KPIs are present in the data then the above 6\n\n### Data type mismatch\n\n% values provided for KPIs with % metrics and numbers for numerical metrics\n\n### Mandatory fields\n\nChecks that none of the mandatory fields should be blank Validations are performed on the uploaded benchmarks and error file generated similar to the Baseline error file. User would then need to fix the errors and reupload the data\n\n### Benchmark preview\n\nIf the file validation is successful, a preview of the updated data is displayed to the user. This is read-only and no editing can be done in this preview. In case the user wants to update the data , they can use the “X” button on top right corner of the preview screen . Alternatively, user can also navigate to the “Explore Benchmarks” page to edit the data.\n\n### Benchmark Summary preview\n\nUsing the toggle on the preview page, user can switch the preview page to a summary view. This view shows the count of benchmarks available for each taxonomy level for each KPI. Any taxonomy elements which are present in the baseline data but there is no benchmark provided for them in the uploaded file are highlighted in different color.\n\nOnce the user verifies the uploaded benchmark data, they can click on the “Next” button to look at the final analysis.\n\nThe Benchmark Summary preview screen displays a detailed table summarizing the uploaded benchmark data from the file 'Benchmarks_7.15.2025.csv'. The table is organized by taxonomy levels, including Function (L1), Process (L2), and Sub-process (L3), and provides metrics such as Overall Cost, Number of Employees, and Personnel Cost. Each metric is further broken down into specific KPIs like 'Cost as % of Revenue' and 'Personnel cost per employee'. Users can verify the benchmark data, with any discrepancies highlighted, before proceeding to the final analysis by clicking the 'Next stage' button.",
+    "evidence_token_count": 804
+  },
+  {
+    "query": "How does the Explore Benchmarks flow handle adding, deleting, and duplicate benchmarks?",
+    "l1_ids": [
+      "0025"
+    ],
+    "evidence_node_ids": [
+      "0032"
+    ],
+    "selected_nodes": [
+      {
+        "node_id": "0032",
+        "title": "Explore benchmarks",
+        "path": "Benchmarking > Explore benchmarks"
+      }
+    ],
+    "timing": {
+      "routing_seconds": 0.633,
+      "answer_seconds": 0.328,
+      "total_seconds": 0.961,
+      "passes": 2
+    },
+    "traversal_path": [
+      {
+        "pass": 1,
+        "candidates": [
+          "0001",
+          "0002",
+          "0004",
+          "0005",
+          "0010",
+          "0019",
+          "0025",
+          "0038",
+          "0059"
+        ],
+        "decisions": [
+          {
+            "id": "0025",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.317
+      },
+      {
+        "pass": 2,
+        "candidates": [
+          "0026",
+          "0027",
+          "0028",
+          "0032",
+          "0033"
+        ],
+        "decisions": [
+          {
+            "id": "0032",
+            "decision": "STOP"
+          }
+        ],
+        "latency_seconds": 0.315
+      }
+    ],
+    "answer": "The Explore Benchmarks flow allows users to manage benchmark data by adding, deleting, and handling duplicates as follows:\n\n- **Adding Benchmarks**: Users can add new benchmarks by clicking the 'Add benchmarks' button, which supports Excel uploads. The uploaded file should contain only new data rows, as this is an append functionality and does not overwrite existing data.\n- **Deleting Benchmarks**: Users can delete benchmarks using the '-' icon in the editable table.\n- **Handling Duplicates**: The system automatically removes duplicate entries during the upload process and notifies the user of any duplicates that were skipped.\n\nSources: [Node 0032] Benchmarking > Explore benchmarks",
+    "evidence": "[Node 0032] Benchmarking > Explore benchmarks\n## Explore benchmarks\n\nThe 'Explore benchmarks' screen displays an editable table for managing benchmark data within a business case. The table includes columns for Function, Process, Sub-process, Metric, Source, Industry, Region, Revenue, FTE, and various performance metrics such as Top Quartile and Median. Users can add new benchmarks using the 'Add benchmarks' button, which supports Excel uploads for appending data. The 'Reset to default' option allows reverting changes to the last saved state. Each row can be expanded to show detailed metrics, and users can delete benchmarks using the '-' icon. This interface facilitates detailed analysis and customization of benchmark data specific to the current case.\n\nThis page provides an Editable table for the Benchmark data.\n\nThis view will also show a data views and a summary view, but the summary view will not be editable.\n\nIn the data view, users can edit existing benchmark values , add new benchmarks and delete benchmarks. It should be noted that this is specific to the current case and changes do not have any impact to benchmark data being used for any other case.\n\n“Reset to Default” functionality on the top will reset the page to its last saved status of the data. The “-“ sign can be used to delete a benchmark from the data.\n\nIn order to add new data , user can click on the “Add benchmarks” button. This is similar to the upload page in the Tool Setup and the user will need to upload new benchmarks data via an excel upload. It should be noted that the excel should contain only the new data rows as this is an append functionality. The old data will not be overwritten by this file upload. The validations for the file will remain safe. In case of any duplicates, the system will remove them by itself and provide a notification to the user.\n\nIn case of any error, a benchmark failed status will be shown and error file can be downloaded.\n\nThe 'Explore benchmarks' screen displays an interface for adding new benchmark data via a CSV file upload. A modal window titled 'Add benchmarks' is open, prompting users to upload a CSV file no larger than 20MB. Users can download a template for the CSV file and either click or drag files into the designated upload area. The main table in the background shows various benchmark categories such as Function, Process, and Performance metrics, which users can edit, add to, or delete from. The 'Reset to Default' button allows users to revert changes to the last saved state. This screen facilitates the management and updating of benchmark data specific to the current case.\n\nThe 'Explore benchmarks' screen displays an editable table for managing benchmark data specific to the current case. Users can view and edit existing benchmarks, add new ones, or delete entries using the '-' sign. The table includes columns for function, process, sub-process, metrics, and performance indicators such as median and quartile values. Notifications at the top confirm successful uploads and highlight skipped duplicates. The 'Add benchmarks' button allows users to append new data via an Excel upload, while 'Reset to default' reverts changes to the last saved state. This interface facilitates detailed analysis and management of benchmark data.",
+    "evidence_token_count": 643
+  },
+  {
+    "query": "Explain me what the benchmarking output page shows?",
+    "l1_ids": [
+      "0025",
+      "0038"
+    ],
+    "evidence_node_ids": [
+      "0033"
+    ],
+    "selected_nodes": [
+      {
+        "node_id": "0033",
+        "title": "Output",
+        "path": "Benchmarking > Output"
+      }
+    ],
+    "timing": {
+      "routing_seconds": 1.139,
+      "answer_seconds": 0.307,
+      "total_seconds": 1.445,
+      "passes": 2
+    },
+    "traversal_path": [
+      {
+        "pass": 1,
+        "candidates": [
+          "0001",
+          "0002",
+          "0004",
+          "0005",
+          "0010",
+          "0019",
+          "0025",
+          "0038",
+          "0059"
+        ],
+        "decisions": [
+          {
+            "id": "0025",
+            "decision": "DESCEND"
+          },
+          {
+            "id": "0038",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.323
+      },
+      {
+        "pass": 2,
+        "candidates": [
+          "0026",
+          "0027",
+          "0028",
+          "0032",
+          "0033",
+          "0039",
+          "0040",
+          "0041",
+          "0042",
+          "0047",
+          "0051",
+          "0058"
+        ],
+        "decisions": [
+          {
+            "id": "0033",
+            "decision": "STOP"
+          }
+        ],
+        "latency_seconds": 0.816
+      }
+    ],
+    "answer": "The benchmarking output page shows a comparison between client values and benchmarks, focusing on financial processes. It includes two views: Summary and Detailed. The Summary view displays analysis data for one KPI and peer set at a time, starting with a default scenario. The Detailed view shows all KPIs for each taxonomy level for one peer set, allowing users to change the peer set at a row level. Both views display the \"Gap to Benchmark\" as a percentage difference between the client's KPI value and the benchmark, without showing actual benchmark values. Users can select which quartile to compare against, and the savings potential is calculated based on the selected quartile. A blank in the \"Gap to Benchmark\" column indicates no available benchmark, while a \"-\" means the client value is better than the benchmark. Users can create and save scenarios, except for the Default scenario, which retains original values.\n\nSources: [Node 0033] Benchmarking > Output",
+    "evidence": "[Node 0033] Benchmarking > Output\n## Output\n\nThe image displays the 'Analysis results' section of the Benchmarking Output page, focusing on the Detailed View. It shows a table with columns for Function, Process, Sub-process, Metric, Baseline Value, and Gap to Benchmark percentages (Top Quartile, Median, Bottom Quartile). The table provides detailed benchmarking data for various financial processes, such as 'Invoice to Cash' and 'Tax', with metrics like 'Cost as % revenue'. Users can compare their baseline values against benchmarks to identify savings potential and peer sets. The Detailed View toggle is visible, indicating the current view mode.\n\nOutput page provides the benchmarking comparison between the client values and benchmarks uploaded. It contains two views: Summary and Detail view\n\n### Calculations for Client value\n\n- Cost as % revenue :\n- Cost of X taxonomy per employee\n- # of employees in taxonomy X as as % of total employees\n- # of employees in X per $1B revenue\n- Personnel cost of X as a % of revenue\n- Personnel cost of X per employee\n\n### Summary view\n\nSummary view shows the analysis data for one KPI and peer set at a time. When the user first lands on the page , the view shows a “default” scenario with the taxonomy selected by the user during Tool Setup at the highest granularity. The default metric and peer set are selected. User can chose to change the granularity for each function individually .\n\n### Detailed View\n\nThe Detailed view shows the analysis data for all the KPIs available for each taxonomy level but only for one peer set. User can choose to change the peer set at a row level. This view also shows the calculated client value for each KPI.\n\n“Gap to Benchmark” : it should be noted that both the views do not show the actual benchmarking values but only the % gap of the client’s KPI value to the benchmarking value. The user can chose which quartile they want to compare to (Top/Median/Bottom/Custom value) and the savings potential is calculated corresponding to the selected quartile. The selected quartile is highlighted in a “purple” color.\n\nIn the “Gap to benchmark” column, a blank value means that no benchmark is available for that quartile. A “-“ means that the client value is already better than the quartile benchmark.\n\n### Saving a Scenario\n\nUser can create new scenarios or save old ones (except Default, which would always show the original values). The Save functionality is an event based Save where the scenario gets saved when a user creates a new scenario, switches to a new scenario or moves to a different tab.",
+    "evidence_token_count": 534
+  },
+  {
+    "query": "Can I download my benchmarking results?",
+    "l1_ids": [
+      "0025"
+    ],
+    "evidence_node_ids": [],
+    "selected_nodes": [],
+    "timing": {
+      "routing_seconds": 0.907,
+      "answer_seconds": 0.311,
+      "total_seconds": 1.218,
+      "passes": 3
+    },
+    "traversal_path": [
+      {
+        "pass": 1,
+        "candidates": [
+          "0001",
+          "0002",
+          "0004",
+          "0005",
+          "0010",
+          "0019",
+          "0025",
+          "0038",
+          "0059"
+        ],
+        "decisions": [
+          {
+            "id": "0025",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.285
+      },
+      {
+        "pass": 2,
+        "candidates": [
+          "0026",
+          "0027",
+          "0028",
+          "0032",
+          "0033"
+        ],
+        "decisions": [
+          {
+            "id": "0028",
+            "decision": "DESCEND"
+          },
+          {
+            "id": "0032",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.308
+      },
+      {
+        "pass": 3,
+        "candidates": [
+          "0029",
+          "0030",
+          "0031"
+        ],
+        "decisions": [],
+        "latency_seconds": 0.314
+      }
+    ],
+    "answer": "This information is not covered in the document.",
+    "evidence": "",
+    "evidence_token_count": 0
+  },
+  {
+    "query": "How do I add functions or sub-functions that are not part of the Bain standard taxonomy in the HRIS/GL data template?",
+    "l1_ids": [
+      "0010",
+      "0019"
+    ],
+    "evidence_node_ids": [
+      "0011",
+      "0014",
+      "0015"
+    ],
+    "selected_nodes": [
+      {
+        "node_id": "0011",
+        "title": "Purpose",
+        "path": "Assessment Selection and setup > Purpose"
+      },
+      {
+        "node_id": "0014",
+        "title": "Feature /Processes/Activities selection page",
+        "path": "Assessment Selection and setup > Page actions > Feature /Processes/Activities selection page"
+      },
+      {
+        "node_id": "0015",
+        "title": "Template column selection page",
+        "path": "Assessment Selection and setup > Page actions > Template column selection page"
+      }
+    ],
+    "timing": {
+      "routing_seconds": 0.911,
+      "answer_seconds": 0.284,
+      "total_seconds": 1.195,
+      "passes": 3
+    },
+    "traversal_path": [
+      {
+        "pass": 1,
+        "candidates": [
+          "0001",
+          "0002",
+          "0004",
+          "0005",
+          "0010",
+          "0019",
+          "0025",
+          "0038",
+          "0059"
+        ],
+        "decisions": [
+          {
+            "id": "0010",
+            "decision": "DESCEND"
+          },
+          {
+            "id": "0019",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.301
+      },
+      {
+        "pass": 2,
+        "candidates": [
+          "0011",
+          "0012",
+          "0020",
+          "0021",
+          "0023",
+          "0024"
+        ],
+        "decisions": [
+          {
+            "id": "0011",
+            "decision": "STOP"
+          },
+          {
+            "id": "0012",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.329
+      },
+      {
+        "pass": 3,
+        "candidates": [
+          "0011",
+          "0013",
+          "0014",
+          "0015",
+          "0016",
+          "0017",
+          "0018"
+        ],
+        "decisions": [
+          {
+            "id": "0014",
+            "decision": "STOP"
+          },
+          {
+            "id": "0015",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.281
+      }
+    ],
+    "answer": "Users can add custom L2 and L3 levels in the HRIS/GL data template. If they define a custom L2 level, they are responsible for defining the lower L3 hierarchy for the same. Additionally, users can add fields using the 'Add field' button in the Template Column Selection page.\n\nSources: [Node 0014] Assessment Selection and setup > Page actions > Feature /Processes/Activities selection page, [Node 0015] Assessment Selection and setup > Page actions > Template column selection page",
+    "evidence": "[Node 0011] Assessment Selection and setup > Purpose\n## Purpose\n\nThis page captures the assessments that the user wants to run\n\nThe screen displays the 'Assessment Selection and Setup' page, where users can choose assessments and configure business functions for analysis. It includes checkboxes for selecting different assessments such as 'Top-down benchmarking' and 'Shared Services Opportunity Assessment.' Below, a table lists business functions like Finance, HR, and IT, with options to rename and select levels for Benchmarking, Shared Services, and Automation. Users can add new business functions using the 'Add business function' button. This page facilitates the setup of assessments by allowing users to customize and select relevant business functions for their analysis.\n\n[Node 0014] Assessment Selection and setup > Page actions > Feature /Processes/Activities selection page\n### Feature /Processes/Activities selection page\n\n- Once the features are selected, user moves to the next page to select L2 and L3 layer. Only the functions selected in previous pages are displayed here.\n- Users can click on the “Edit” button to display the list of L2 levels for the Function.\n- L2 levels will be displayed as editable text that the user can easily rename them.\n- L3 levels will be shown as a slidedown when a L2 level is clicked upon. These will also be editable directly\n- Users can add both custom L2 and L3 levels but if they define a L2 level they are responsible to define the lower L3 hierarchy for the same\n\nThe Feature/Processes/Activities selection page displays a list of business functions such as Finance, HR, IT, Legal, Facility Management, Marketing, and Operations. Each function has an 'Edit' button, allowing users to modify the taxonomy of each business function. The 'Reset to default' button is available but currently disabled. The page facilitates the review and customization of the taxonomy for each business function, enabling users to tailor the hierarchy to their specific needs. A 'Next stage' button is visible at the bottom, indicating progression to the subsequent step in the workflow.\n\nThe 'Edit Finance' screen allows users to manage Processes (L2) and Activities (L3) within the finance function. Users can rename, add, or delete entries. The interface displays a list of L2 processes such as 'Financial Planning & Analysis' and 'Control / Internal Audit,' with expandable sections to reveal associated L3 activities like 'Policies & Procedures' and 'Audit.' Each entry has an edit icon for renaming and a delete icon for removal. A button labeled 'Add activity' enables users to introduce new activities. The screen includes 'Cancel' and 'Save & Update' buttons to discard or save changes, respectively, facilitating efficient customization of financial processes.\n\n[Node 0015] Assessment Selection and setup > Page actions > Template column selection page\n### Template column selection page\n\n- Users will select the template they want to input data. The options are dependent on the assessment selected. HRIS and GL files are present for all assessments but a third option appears for Outsourced files if a user selects SSOI as one of the assessments.\n- The user can then select the relevant columns for which they plan to run the assessments\n\nThe Template Column Selection page allows users to choose templates for data input based on the selected assessment. Visible are options for 'HR Baseline' and 'GL Baseline' templates, each with a preview section listing field names such as 'Unique ID' and 'Employee type' for HR, and 'Functional Allocation' for GL. Users can add fields using the 'Add field' button. This screen facilitates the customization of data templates, enabling users to select relevant columns for running assessments, particularly when dealing with HRIS, GL, and potentially Outsourced files if SSOI is selected.",
+    "evidence_token_count": 772
+  },
+  {
+    "query": "What currency should I use to upload the cost data?",
+    "l1_ids": [
+      "0005",
+      "0019"
+    ],
+    "evidence_node_ids": [
+      "0009",
+      "0006"
+    ],
+    "selected_nodes": [
+      {
+        "node_id": "0009",
+        "title": "Form actions",
+        "path": "Company Overview > Form actions"
+      },
+      {
+        "node_id": "0006",
+        "title": "Purpose",
+        "path": "Company Overview > Purpose"
+      }
+    ],
+    "timing": {
+      "routing_seconds": 0.625,
+      "answer_seconds": 0.321,
+      "total_seconds": 0.946,
+      "passes": 2
+    },
+    "traversal_path": [
+      {
+        "pass": 1,
+        "candidates": [
+          "0001",
+          "0002",
+          "0004",
+          "0005",
+          "0010",
+          "0019",
+          "0025",
+          "0038",
+          "0059"
+        ],
+        "decisions": [
+          {
+            "id": "0005",
+            "decision": "DESCEND"
+          },
+          {
+            "id": "0019",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.311
+      },
+      {
+        "pass": 2,
+        "candidates": [
+          "0006",
+          "0007",
+          "0008",
+          "0009",
+          "0020",
+          "0021",
+          "0023",
+          "0024"
+        ],
+        "decisions": [
+          {
+            "id": "0006",
+            "decision": "STOP"
+          },
+          {
+            "id": "0009",
+            "decision": "STOP"
+          }
+        ],
+        "latency_seconds": 0.314
+      }
+    ],
+    "answer": "This information is not covered in the document.",
+    "evidence": "[Node 0009] Company Overview > Form actions\n## Form actions\n\nExchange rate will be populated from a standard table in the DB. The exchange rate data will be updated on a quarterly basis by the COE. However, the user has rights to update the exchange rate manually.\n\n[Node 0006] Company Overview > Purpose\n## Purpose\n\nThis is the Landing page for the user when starting a new case. This will collect high level info regarding the company\n\nThe screen displays the 'Company Overview' section for creating a new company profile within the platform. It features a form titled 'Company profile' with fields for entering essential company information such as Company Name, Industry, Company Revenue, Total number of Head Count, Currency, and Exchange rate. A navigation bar at the top outlines the workflow steps: Create company profile, Select assessment and functional taxonomy, Upload client data, and Upload benchmarks. A 'Next stage' button is present but currently disabled, indicating that the form must be completed before proceeding. This screen helps users input foundational business details to initiate a new case.",
+    "evidence_token_count": 218
+  },
+  {
+    "query": "To what extent can we customise the input HRIS and GL file?",
+    "l1_ids": [
+      "0010",
+      "0019"
+    ],
+    "evidence_node_ids": [
+      "0015"
+    ],
+    "selected_nodes": [
+      {
+        "node_id": "0015",
+        "title": "Template column selection page",
+        "path": "Assessment Selection and setup > Page actions > Template column selection page"
+      }
+    ],
+    "timing": {
+      "routing_seconds": 1.376,
+      "answer_seconds": 0.299,
+      "total_seconds": 1.675,
+      "passes": 4
+    },
+    "traversal_path": [
+      {
+        "pass": 1,
+        "candidates": [
+          "0001",
+          "0002",
+          "0004",
+          "0005",
+          "0010",
+          "0019",
+          "0025",
+          "0038",
+          "0059"
+        ],
+        "decisions": [
+          {
+            "id": "0010",
+            "decision": "DESCEND"
+          },
+          {
+            "id": "0019",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.281
+      },
+      {
+        "pass": 2,
+        "candidates": [
+          "0011",
+          "0012",
+          "0020",
+          "0021",
+          "0023",
+          "0024"
+        ],
+        "decisions": [
+          {
+            "id": "0012",
+            "decision": "DESCEND"
+          },
+          {
+            "id": "0021",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.352
+      },
+      {
+        "pass": 3,
+        "candidates": [
+          "0013",
+          "0014",
+          "0015",
+          "0016",
+          "0017",
+          "0018",
+          "0022"
+        ],
+        "decisions": [
+          {
+            "id": "0015",
+            "decision": "STOP"
+          },
+          {
+            "id": "0014",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.435
+      },
+      {
+        "pass": 4,
+        "candidates": [
+          "0015",
+          "0062",
+          "0063"
+        ],
+        "decisions": [
+          {
+            "id": "0015",
+            "decision": "STOP"
+          }
+        ],
+        "latency_seconds": 0.307
+      }
+    ],
+    "answer": "Users can customize the input HRIS and GL files by selecting relevant columns for running assessments. They can choose templates for data input and add fields using the 'Add field' button on the Template Column Selection page. \n\nSources: [Node 0015] Assessment Selection and setup > Page actions > Template column selection page",
+    "evidence": "[Node 0015] Assessment Selection and setup > Page actions > Template column selection page\n### Template column selection page\n\n- Users will select the template they want to input data. The options are dependent on the assessment selected. HRIS and GL files are present for all assessments but a third option appears for Outsourced files if a user selects SSOI as one of the assessments.\n- The user can then select the relevant columns for which they plan to run the assessments\n\nThe Template Column Selection page allows users to choose templates for data input based on the selected assessment. Visible are options for 'HR Baseline' and 'GL Baseline' templates, each with a preview section listing field names such as 'Unique ID' and 'Employee type' for HR, and 'Functional Allocation' for GL. Users can add fields using the 'Add field' button. This screen facilitates the customization of data templates, enabling users to select relevant columns for running assessments, particularly when dealing with HRIS, GL, and potentially Outsourced files if SSOI is selected.",
+    "evidence_token_count": 214
+  },
+  {
+    "query": "Can I create multiple scenarios using benchmarks of different peer-sets?",
+    "l1_ids": [
+      "0025",
+      "0038"
+    ],
+    "evidence_node_ids": [
+      "0033",
+      "0058"
+    ],
+    "selected_nodes": [
+      {
+        "node_id": "0033",
+        "title": "Output",
+        "path": "Benchmarking > Output"
+      },
+      {
+        "node_id": "0058",
+        "title": "Scenario management",
+        "path": "Shared Services > Scenario management"
+      }
+    ],
+    "timing": {
+      "routing_seconds": 0.57,
+      "answer_seconds": 0.282,
+      "total_seconds": 0.852,
+      "passes": 2
+    },
+    "traversal_path": [
+      {
+        "pass": 1,
+        "candidates": [
+          "0001",
+          "0002",
+          "0004",
+          "0005",
+          "0010",
+          "0019",
+          "0025",
+          "0038",
+          "0059"
+        ],
+        "decisions": [
+          {
+            "id": "0025",
+            "decision": "DESCEND"
+          },
+          {
+            "id": "0038",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.287
+      },
+      {
+        "pass": 2,
+        "candidates": [
+          "0026",
+          "0027",
+          "0028",
+          "0032",
+          "0033",
+          "0039",
+          "0040",
+          "0041",
+          "0042",
+          "0047",
+          "0051",
+          "0058"
+        ],
+        "decisions": [
+          {
+            "id": "0033",
+            "decision": "STOP"
+          },
+          {
+            "id": "0058",
+            "decision": "STOP"
+          }
+        ],
+        "latency_seconds": 0.283
+      }
+    ],
+    "answer": "Yes, you can create multiple scenarios using benchmarks of different peer-sets. Users can create new scenarios or save old ones, and in the Detailed View, they can choose to change the peer set at a row level. This allows for the creation of scenarios with different peer-set benchmarks.\n\nSources: [Node 0033] Benchmarking > Output, [Node 0058] Shared Services > Scenario management",
+    "evidence": "[Node 0033] Benchmarking > Output\n## Output\n\nThe image displays the 'Analysis results' section of the Benchmarking Output page, focusing on the Detailed View. It shows a table with columns for Function, Process, Sub-process, Metric, Baseline Value, and Gap to Benchmark percentages (Top Quartile, Median, Bottom Quartile). The table provides detailed benchmarking data for various financial processes, such as 'Invoice to Cash' and 'Tax', with metrics like 'Cost as % revenue'. Users can compare their baseline values against benchmarks to identify savings potential and peer sets. The Detailed View toggle is visible, indicating the current view mode.\n\nOutput page provides the benchmarking comparison between the client values and benchmarks uploaded. It contains two views: Summary and Detail view\n\n### Calculations for Client value\n\n- Cost as % revenue :\n- Cost of X taxonomy per employee\n- # of employees in taxonomy X as as % of total employees\n- # of employees in X per $1B revenue\n- Personnel cost of X as a % of revenue\n- Personnel cost of X per employee\n\n### Summary view\n\nSummary view shows the analysis data for one KPI and peer set at a time. When the user first lands on the page , the view shows a “default” scenario with the taxonomy selected by the user during Tool Setup at the highest granularity. The default metric and peer set are selected. User can chose to change the granularity for each function individually .\n\n### Detailed View\n\nThe Detailed view shows the analysis data for all the KPIs available for each taxonomy level but only for one peer set. User can choose to change the peer set at a row level. This view also shows the calculated client value for each KPI.\n\n“Gap to Benchmark” : it should be noted that both the views do not show the actual benchmarking values but only the % gap of the client’s KPI value to the benchmarking value. The user can chose which quartile they want to compare to (Top/Median/Bottom/Custom value) and the savings potential is calculated corresponding to the selected quartile. The selected quartile is highlighted in a “purple” color.\n\nIn the “Gap to benchmark” column, a blank value means that no benchmark is available for that quartile. A “-“ means that the client value is already better than the quartile benchmark.\n\n### Saving a Scenario\n\nUser can create new scenarios or save old ones (except Default, which would always show the original values). The Save functionality is an event based Save where the scenario gets saved when a user creates a new scenario, switches to a new scenario or moves to a different tab.\n\n[Node 0058] Shared Services > Scenario management\n## Scenario management\n\nSSOI calculations follow a top down approach. Changes made to an assumption or costs page has an impact on all the values in the pages coming after that page. However, there is no impact on assumptions/costs before that page. This has an impact on how the scenarios are managed for SSOI.\n\nScenarios in SSOI are global scenarios i.e a scenario create don one page is available on other pages as well. By default there will be a “Master” scenario which will have the original values and can not be edited.\n\nEx: If user creates a scenario “Scenario 1” on Benchmarking page , then when user moves to the “Site selection” page, they will see “scenario 1” already selected there. This scenario will be based on the values from the “scenario 1” on Benchmarking page. Similarly “Scenario 1” would be created for all the other pages in the sequence.",
+    "evidence_token_count": 738
+  },
+  {
+    "query": "How do we validate the credibility of external benchmarks?",
+    "l1_ids": [
+      "0025"
+    ],
+    "evidence_node_ids": [
+      "0031"
+    ],
+    "selected_nodes": [
+      {
+        "node_id": "0031",
+        "title": "Benchmark Summary preview",
+        "path": "Benchmarking > Benchmark Upload > Benchmark Summary preview"
+      }
+    ],
+    "timing": {
+      "routing_seconds": 0.925,
+      "answer_seconds": 0.27,
+      "total_seconds": 1.195,
+      "passes": 3
+    },
+    "traversal_path": [
+      {
+        "pass": 1,
+        "candidates": [
+          "0001",
+          "0002",
+          "0004",
+          "0005",
+          "0010",
+          "0019",
+          "0025",
+          "0038",
+          "0059"
+        ],
+        "decisions": [
+          {
+            "id": "0025",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.308
+      },
+      {
+        "pass": 2,
+        "candidates": [
+          "0026",
+          "0027",
+          "0028",
+          "0032",
+          "0033"
+        ],
+        "decisions": [
+          {
+            "id": "0028",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.32
+      },
+      {
+        "pass": 3,
+        "candidates": [
+          "0029",
+          "0030",
+          "0031"
+        ],
+        "decisions": [
+          {
+            "id": "0031",
+            "decision": "STOP"
+          }
+        ],
+        "latency_seconds": 0.297
+      }
+    ],
+    "answer": "This information is not covered in the document.",
+    "evidence": "[Node 0031] Benchmarking > Benchmark Upload > Benchmark Summary preview\n### Benchmark Summary preview\n\nUsing the toggle on the preview page, user can switch the preview page to a summary view. This view shows the count of benchmarks available for each taxonomy level for each KPI. Any taxonomy elements which are present in the baseline data but there is no benchmark provided for them in the uploaded file are highlighted in different color.\n\nOnce the user verifies the uploaded benchmark data, they can click on the “Next” button to look at the final analysis.\n\nThe Benchmark Summary preview screen displays a detailed table summarizing the uploaded benchmark data from the file 'Benchmarks_7.15.2025.csv'. The table is organized by taxonomy levels, including Function (L1), Process (L2), and Sub-process (L3), and provides metrics such as Overall Cost, Number of Employees, and Personnel Cost. Each metric is further broken down into specific KPIs like 'Cost as % of Revenue' and 'Personnel cost per employee'. Users can verify the benchmark data, with any discrepancies highlighted, before proceeding to the final analysis by clicking the 'Next stage' button.",
+    "evidence_token_count": 233
+  },
+  {
+    "query": "How can we reduce ERP cost?",
+    "l1_ids": [
+      "0038"
+    ],
+    "evidence_node_ids": [
+      "0041",
+      "0040",
+      "0039"
+    ],
+    "selected_nodes": [
+      {
+        "node_id": "0041",
+        "title": "Screens",
+        "path": "Shared Services > Screens"
+      },
+      {
+        "node_id": "0040",
+        "title": "Functional Objectives",
+        "path": "Shared Services > Functional Objectives"
+      },
+      {
+        "node_id": "0039",
+        "title": "Tool Overview",
+        "path": "Shared Services > Tool Overview"
+      }
+    ],
+    "timing": {
+      "routing_seconds": 0.622,
+      "answer_seconds": 0.948,
+      "total_seconds": 1.569,
+      "passes": 2
+    },
+    "traversal_path": [
+      {
+        "pass": 1,
+        "candidates": [
+          "0001",
+          "0002",
+          "0004",
+          "0005",
+          "0010",
+          "0019",
+          "0025",
+          "0038",
+          "0059"
+        ],
+        "decisions": [
+          {
+            "id": "0038",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.319
+      },
+      {
+        "pass": 2,
+        "candidates": [
+          "0039",
+          "0040",
+          "0041",
+          "0042",
+          "0047",
+          "0051",
+          "0058"
+        ],
+        "decisions": [
+          {
+            "id": "0039",
+            "decision": "STOP"
+          },
+          {
+            "id": "0040",
+            "decision": "STOP"
+          },
+          {
+            "id": "0041",
+            "decision": "STOP"
+          },
+          {
+            "id": "0042",
+            "decision": "DESCEND"
+          },
+          {
+            "id": "0047",
+            "decision": "DESCEND"
+          },
+          {
+            "id": "0051",
+            "decision": "DESCEND"
+          }
+        ],
+        "latency_seconds": 0.303
+      }
+    ],
+    "answer": "This information is not covered in the document.",
+    "evidence": "[Node 0041] Shared Services > Screens\n## Screens\n\nShared Services tool can be divided into three major sections:\n\n### Overall Assumptions\n\n- SSOI Benchmarks\n- Site Selection\n- Resource allocation\n- Site allocation\n\n### One off cost assumptions\n\n- Transition costs\n- Severance costs\n- Other one-off costs\n\n### Output\n\n- Savings and FTE evolution\n- Annual run-rate savings\n- FTE impact overall view\n- FTE shifts\n- One-time cost overview\n- Calendar view\n- All data table\n\n[Node 0040] Shared Services > Functional Objectives\n## Functional Objectives\n\nThe tool enables users to:\n\n- Analyze the current state of functional personnel distribution.\n- Define and apply benchmark-driven target models.\n- Simulate scenarios for shared services adoption.\n- Estimate financial impact and FTE movement.\n- Generate comparative outputs to aid executive decision-making.\n\n[Node 0039] Shared Services > Tool Overview\n## Tool Overview\n\nThe Shared Services Opportunity Indicator (SSOI) is a strategic analysis tool designed to help organizations evaluate, model, and optimize their shared services footprint across business functions such as Finance and HR etc... It supports data-driven decisions for transitioning operations into centralized shared service centers and enables users to simulate multiple future-state scenarios, estimate cost savings, and understand organizational impact.",
+    "evidence_token_count": 269
+  }
+]
